@@ -41,6 +41,7 @@ pub fn main() !void {
 
     // our call to openDir with the iterate flag
     var iterable_dir = try std.fs.openDirAbsolute(wd, .{ .iterate = true });
+    defer iterable_dir.close();
 
     var it = iterable_dir.iterate();
 
