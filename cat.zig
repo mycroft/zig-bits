@@ -17,11 +17,9 @@ pub fn main() !void {
     const stdin = std.io.getStdIn().reader();
     const stdout = std.io.getStdOut().writer();
 
-    var file: std.fs.File = undefined;
-
     if (std.os.argv.len > 1) {
         const filename = std.mem.span(std.os.argv[1]);
-        file = try std.fs.cwd().openFile(filename, .{ .mode = .read_only });
+        var file = try std.fs.cwd().openFile(filename, .{ .mode = .read_only });
         defer file.close();
 
         try cat(file.reader(), stdout);
