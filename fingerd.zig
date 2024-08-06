@@ -86,6 +86,11 @@ fn get_plan(allocator: std.mem.Allocator, username: []const u8) ![]u8 {
         defer allocator.free(passwd_str2);
         res = try concat_free(allocator, res, passwd_str);
         res = try concat_free(allocator, res, passwd_str2);
+
+        allocator.free(passwd.?.gecos);
+        allocator.free(passwd.?.path);
+        allocator.free(passwd.?.shell);
+        allocator.free(passwd.?.username);
     }
 
     res = try concat_free(allocator, res, "Plan:\n");
