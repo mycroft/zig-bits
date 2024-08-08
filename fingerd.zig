@@ -9,6 +9,13 @@ const Passwd = struct {
     gecos: []const u8,
     path: []const u8,
     shell: []const u8,
+
+    pub fn deinit(self: *const Passwd, allocator: std.mem.Allocator) void {
+        allocator.free(self.username);
+        allocator.free(self.gecos);
+        allocator.free(self.path);
+        allocator.free(self.shell);
+    }
 };
 
 const ParsingError = error{
@@ -87,10 +94,7 @@ fn get_plan(allocator: std.mem.Allocator, username: []const u8) ![]u8 {
         res = try concat_free(allocator, res, passwd_str);
         res = try concat_free(allocator, res, passwd_str2);
 
-        allocator.free(passwd.?.gecos);
-        allocator.free(passwd.?.path);
-        allocator.free(passwd.?.shell);
-        allocator.free(passwd.?.username);
+        passwd.?.deinit(allocator);
     }
 
     res = try concat_free(allocator, res, "Plan:\n");
